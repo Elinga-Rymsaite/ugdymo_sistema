@@ -19,11 +19,16 @@ from django.urls import path
 from django.views.generic import RedirectView  # Import RedirectView
 from emocijos import views
 
+# jausmukai/urls.py
+from django.contrib import admin
+from django.urls import path
+from django.views.generic import RedirectView
+from emocijos import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='pagrindinis', permanent=True)'),
-    path('pagrindinis/', views.pagrindinis, name='pagrindinis'),  # Added trailing slash for consistency
-
+    path('', RedirectView.as_view(url='pagrindinis', permanent=True)),  # Removed extra single quote
+    path('pagrindinis/', views.pagrindinis, name='pagrindinis'),
     path('emociju-atpazinimas/', views.emociju_atpazinimas, name='emociju_atpazinimas'),
     path('valgiu_derinimas/', views.valgiu_derinimas, name='valgiu_derinimas'),
     path('dienos_rezimas/', views.dienos_rezimas, name='dienos_rezimas'),
