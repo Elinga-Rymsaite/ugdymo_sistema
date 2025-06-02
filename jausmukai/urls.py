@@ -26,7 +26,7 @@ from django.views.generic import RedirectView
 from emocijos import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+
     path('', RedirectView.as_view(url='pagrindinis', permanent=True)),  # Removed extra single quote
     path('pagrindinis/', views.pagrindinis, name='pagrindinis'),
     path('emociju-atpazinimas/', views.emociju_atpazinimas, name='emociju_atpazinimas'),
@@ -35,5 +35,5 @@ urlpatterns = [
     path('svaros_zaidimas/', views.svaros_zaidimas, name='svaros_zaidimas'),
     path('veidukas/', views.veidukas, name='veidukas'),
     path('pagrindinis.html', views.pagrindinis, name='pagrindinis_html'),
-    path('test-template/', views.test_template, name='test_template'),
+
 ]
