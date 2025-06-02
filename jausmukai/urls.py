@@ -35,4 +35,5 @@ urlpatterns = [
     path('svaros_zaidimas/', views.svaros_zaidimas, name='svaros_zaidimas'),
     path('veidukas/', views.veidukas, name='veidukas'),
     path('pagrindinis.html', views.pagrindinis, name='pagrindinis_html'),
+    path('test-template/', views.test_template, name='test_template'),
 ]

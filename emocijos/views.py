@@ -191,3 +191,21 @@ def svaros_zaidimas(request):
 
 def veidukas(request):
     return render(request, 'veidukas.html')
+
+def test_template(request):
+    templates = [
+        'emocijos/pagrindinis.html',
+        'emocijos/emociju_atpazinimas.html',
+        'emocijos/valgiu_derinimas.html',
+        'emocijos/dienos_rezimas.html',
+        'svaros_zaidimas.html',
+        'veidukas.html',
+    ]
+    results = []
+    for template in templates:
+        try:
+            get_template(template)
+            results.append(f"Template {template} found!")
+        except TemplateDoesNotExist:
+            results.append(f"Template {template} not found!")
+    return HttpResponse("<br>".join(results))

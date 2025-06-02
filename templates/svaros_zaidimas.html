@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8">
+  <title>Švaros rūšiavimo žaidimas</title>
+ <link rel="stylesheet" href="{% static 'css/svaros_zaidimas.css' %}">
+</head>
+<body>
+  <button class="atgal" onclick="history.back()"></button>
+  <button id="mute-button" onclick="toggleMute()"></button>
+  <button id="resetZaidima" onclick="location.reload()"></button>
+  <audio id="background-music" autoplay loop>
+    <source src="{% static 'audio/2.mp3' %}" type="audio/mpeg">
+  </audio>
+  <audio id="incorrect-sound">
+    <source src="{% static 'audio/neteisingai.mp3' %}" type="audio/mpeg">
+  </audio>
+
+  <h1>Švaros rūšiavimo žaidimas</h1>
+
+  <div class="container">
+    <div class="kategorija" id="svara" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>ŠVARA 🧽</h2>
+      <div class="korteles"></div>
+    </div>
+    <div class="kategorija" id="netvarka" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <h2>NETVARKA 🚫</h2>
+      <div class="korteles"></div>
+    </div>
+  </div>
+
+  <div class="korteles" id="korteles">
+    <div class="kortele" id="valausi_dantis" draggable="true" ondragstart="dragStart(event)" data-category="svara">
+      <img src="{% static 'image/dantukaii.jpg' %}" alt="Valausi dantis">
+    </div>
+    <div class="kortele" id="tvarkosi_kambaryje" draggable="true" ondragstart="dragStart(event)" data-category="svara">
+      <img src="{% static 'image/kambariukas.jpg' %}" alt="Tvarkosi kambaryje">
+    </div>
+    <div class="kortele" id="renka_siuksles" draggable="true" ondragstart="dragStart(event)" data-category="svara">
+      <img src="{% static 'image/šiukslės.jpg' %}" alt="Renka šiukšles">
+    </div>
+    <div class="kortele" id="purvinos_grindys" draggable="true" ondragstart="dragStart(event)" data-category="netvarka">
+      <img src="{% static 'image/grindeles.jpg' %}" alt="Purvinos grindys">
+    </div>
+    <div class="kortele" id="plaunu_rankas" draggable="true" ondragstart="dragStart(event)" data-category="svara">
+      <img src="{% static 'image/pliušku.jpg' %}" alt="Plaunu rankas">
+    </div>
+    <div class="kortele" id="nesvarios_rankos" draggable="true" ondragstart="dragStart(event)" data-category="netvarka">
+      <img src="{% static 'image/murzius.jpg' %}" alt="Nešvarios rankos">
+    </div>
+    <div class="kortele" id="nesvari_lekste" draggable="true" ondragstart="dragStart(event)" data-category="netvarka">
+      <img src="{% static 'image/lėkštutė.jpg' %}" alt="Nešvari lėkštė">
+    </div>
+    <div class="kortele" id="nepaklota_lova" draggable="true" ondragstart="dragStart(event)" data-category="netvarka">
+      <img src="{% static 'image/lovytė.jpg' %}" alt="Nepaklota lova">
+    </div>
+  </div>
+
+  <div id="endModal" class="modal">
+    <div class="modal-content">
+      <button id="closeModalButton" aria-label="Close modal">✖</button>
+      <img src="{% static 'image/švarutis.png' %}" alt="Švarutis">
+      <h2>🎉 Puikiai padirbėta! 🎉</h2>
+      <button onclick="location.reload()">🔁 Žaisti dar kartą</button>
+    </div>
+  </div>
+
+  <script>
+    function dragStart(e) {
+      let target = e.target;
+      if (target.tagName.toLowerCase() === 'img') {
+        target = target.parentElement;
+      }
+      e.dataTransfer.setData('text/plain', target.id);
+    }
+
+    function allowDrop(e) {
+      e.preventDefault();
+    }
+
+    function drop(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text');
+      const dragged = document.getElementById(id);
+      const target = e.target.closest('.kategorija');
+
+      if (target && dragged && !target.contains(dragged)) {
+        const correctCategory = dragged.dataset.category;
+        const targetCategory = target.id;
+
+        if (correctCategory === targetCategory) {
+          const korteles = target.querySelector('.korteles');
+          korteles.appendChild(dragged);
+          checkAllSorted();
+        } else {
+          const incorrectSound = document.getElementById('incorrect-sound');
+          incorrectSound.play();
+        }
+      }
+    }
+
+    function toggleMute() {
+      const music = document.getElementById("background-music");
+      const incorrectSound = document.getElementById('incorrect-sound');
+      const icon = document.getElementById("mute-button");
+      music.muted = !music.muted;
+      incorrectSound.muted = music.muted;
+      if (!music.muted) {
+        music.volume = 0.2;
+      }
+      icon.classList.toggle('muted', music.muted);
+      localStorage.setItem('muteState', music.muted ? 'muted' : 'unmuted');
+    }
+
+    function closeModal() {
+      document.getElementById('endModal').style.display = 'none';
+      const music = document.getElementById('background-music');
+      if (!music.muted) {
+        music.play().catch(error => console.warn('Music play failed:', error.message));
+      }
+    }
+
+    function checkAllSorted() {
+      const remaining = document.getElementById('korteles').children.length;
+      if (remaining === 0) {
+        const music = document.getElementById('background-music');
+        music.pause();
+        document.getElementById('endModal').style.display = 'flex';
+      }
+    }
+
+    window.onload = function() {
+      const music = document.getElementById('background-music');
+      const incorrectSound = document.getElementById('incorrect-sound');
+      music.volume = 0.10;
+      incorrectSound.volume = 0.5;
+      const muteButton = document.getElementById('mute-button');
+      const savedMuteState = localStorage.getItem('muteState');
+      if (savedMuteState === 'muted') {
+        music.muted = true;
+        incorrectSound.muted = true;
+        muteButton.classList.add('muted');
+      } else {
+        music.muted = false;
+        incorrectSound.muted = false;
+        muteButton.classList.remove('muted');
+      }
+
+      const modal = document.getElementById('endModal');
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      document.getElementById('closeModalButton').addEventListener('click', () => {
+        closeModal();
+      });
+    };
+  </script>
+</body>
+</html>
