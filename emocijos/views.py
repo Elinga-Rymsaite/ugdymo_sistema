@@ -94,7 +94,7 @@ def emociju_atpazinimas(request):
 
         if game_completed:
             logger.debug(f"POST ignored: game_completed={game_completed}")
-            return render(request, 'emocijos/emociju_atpazinimas.html', {
+            return render(request, 'emociju_atpazinimas.html', {
                 'game_completed': True,
                 'progress_percent': 100,
                 'completion_message': "Sveikiname! Jūs baigėte emocijų atpažinimo žaidimą!"
@@ -105,7 +105,7 @@ def emociju_atpazinimas(request):
             logger.warning("No emotion selected in POST request")
             pasirinktas_paveikslelis = rodyti_paveikslelius[indexas][0]
             progress_percent = int((indexas / len(rodyti_paveikslelius)) * 100)
-            return render(request, 'emocijos/emociju_atpazinimas.html', {
+            return render(request, 'emociju_atpazinimas.html', {
                 'paveikslelis': pasirinktas_paveikslelis,
                 'atsakymas': "Prašome pasirinkti emociją!",
                 'progress_percent': progress_percent,
@@ -132,7 +132,7 @@ def emociju_atpazinimas(request):
                 logger.error(f"Session save failed: {str(e)}")
                 request.session.flush()
                 return redirect('emociju_atpazinimas')
-            return render(request, 'emocijos/emociju_atpazinimas.html', {
+            return render(request, 'emociju_atpazinimas.html', {
                 'paveikslelis': current_image,
                 'atsakymas': atsakymas,
                 'progress_percent': 100,
@@ -155,7 +155,7 @@ def emociju_atpazinimas(request):
         progress_percent = int(((indexas + 1) / len(rodyti_paveikslelius)) * 100) if atsakymas == "teisingai" else int((indexas / len(rodyti_paveikslelius)) * 100)
         pasirinktas_paveikslelis = rodyti_paveikslelius[indexas][0]
 
-        return render(request, 'emocijos/emociju_atpazinimas.html', {
+        return render(request, 'emociju_atpazinimas.html', {
             'paveikslelis': pasirinktas_paveikslelis,
             'atsakymas': atsakymas,
             'progress_percent': progress_percent,
@@ -175,16 +175,16 @@ def emociju_atpazinimas(request):
     if game_completed:
         context['completion_message'] = "Sveikiname! Jūs baigėte emocijų atpažinimo žaidimą!"
 
-    return render(request, 'emocijos/emociju_atpazinimas.html', context)
+    return render(request, 'emociju_atpazinimas.html', context)
 
 def pagrindinis(request):
-    return render(request, 'emocijos/pagrindinis.html')
+    return render(request, 'pagrindinis.html')
 
 def valgiu_derinimas(request):
-    return render(request, 'emocijos/valgiu_derinimas.html')
+    return render(request, 'valgiu_derinimas.html')
 
 def dienos_rezimas(request):
-    return render(request, 'emocijos/dienos_rezimas.html')
+    return render(request, 'dienos_rezimas.html')
 
 def svaros_zaidimas(request):
     return render(request, 'svaros_zaidimas.html')
@@ -194,10 +194,10 @@ def veidukas(request):
 
 def test_template(request):
     templates = [
-        'emocijos/pagrindinis.html',
-        'emocijos/emociju_atpazinimas.html',
-        'emocijos/valgiu_derinimas.html',
-        'emocijos/dienos_rezimas.html',
+        'pagrindinis.html',
+        'emociju_atpazinimas.html',
+        'valgiu_derinimas.html',
+        'dienos_rezimas.html',
         'svaros_zaidimas.html',
         'veidukas.html',
     ]
