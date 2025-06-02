@@ -1,0 +1,100 @@
+
+:root {
+  --background-image: url('/static/image/fonas1.png');
+  --emotion-button-image: url('/static/image/emotion_icon.png');
+  --meal-button-image: url('/static/image/meal_icon.png');
+  --clean-button-image: url('/static/image/clean_icon.png');
+  --routine-button-image: url('/static/image/routine_icon.png');
+  --face-button-image: url('/static/image/face_icon.png');
+}
+
+body {
+    font-family: 'Comic Sans MS', sans-serif;
+    text-align: center;
+    background: var(--background-image) no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.debesies-blokas {
+    background: rgba(255, 255, 255, 0.75);
+    padding: 40px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: #e75480;
+    font-size: 36px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #aaa;
+}
+
+p {
+    font-size: 18px;
+    margin: 0 0 30px 0;
+    text-shadow: 1px 1px 2px #aaa;
+}
+
+.mygtukas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 15px 30px;
+    font-size: 20px;
+    background-color: #fdd835;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 320px;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+}
+
+.mygtukas:hover {
+    background-color: #f4c20d;
+    transform: scale(1.05);
+}
+
+/* Styling for images inside buttons */
+.mygtukas img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Assign specific images to each button using custom properties */
+.mygtukas.emotion-button img {
+    content: var(--emotion-button-image);
+}
+
+.mygtukas.meal-button img {
+    content: var(--meal-button-image);
+}
+
+.mygtukas.clean-button img {
+    content: var(--clean-button-image);
+}
+
+.mygtukas.routine-button img {
+    content: var(--routine-button-image);
+}
+
+.mygtukas.face-button img {
+    content: var(--face-button-image);
+}

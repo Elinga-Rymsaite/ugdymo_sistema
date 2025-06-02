@@ -1,0 +1,255 @@
+/* Define custom properties for image URLs */
+:root {
+  --background-image: url('/static/image/fonas_vaivo.png');
+  --back-button-image: url('/static/image/rodyklė.png');
+  --mute-button-image: url('/static/image/garso_ikona.png');
+  --mute-button-muted-image: url('/static/image/garso_ikona_issjungta.png');
+  --reset-button-image: url('/static/image/atnaujinti.png');
+  --card-dantukaii-image: url('/static/image/dantukaii.jpg');
+  --card-kambariukas-image: url('/static/image/kambariukas.jpg');
+  --card-siuksles-image: url('/static/image/šiukslės.jpg');
+  --card-grindeles-image: url('/static/image/grindeles.jpg');
+  --card-pliusku-image: url('/static/image/pliušku.jpg');
+  --card-murzius-image: url('/static/image/murzius.jpg');
+  --card-lekstute-image: url('/static/image/lėkštutė.jpg');
+  --card-lovyte-image: url('/static/image/lovytė.jpg');
+  --end-modal-image: url('/static/image/švarutis.png');
+}
+
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive;
+  background: var(--background-image) no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.atgal {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  background: var(--back-button-image) no-repeat center center white;
+  background-size: 50%;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+#mute-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  background: #fff var(--mute-button-image) no-repeat center center;
+  background-size: 60%;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10001;
+}
+
+#mute-button.muted {
+  background: #fff var(--mute-button-muted-image) no-repeat center center;
+  background-size: 60%;
+}
+
+#resetZaidima {
+  position: absolute;
+  top: 10px;
+  right: 70px;
+  width: 50px;
+  height: 50px;
+  background: #fff var(--reset-button-image) no-repeat center center;
+  background-size: 60%;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10001;
+  padding: 0;
+}
+
+.atgal:hover,
+#mute-button:hover,
+#resetZaidima:hover {
+  opacity: 0.8;
+}
+
+h1 {
+  text-align: center;
+  color: #C2185B;
+  margin: 15px 0 10px;
+  font-size: 28px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 15px;
+  flex-wrap: wrap;
+}
+
+.kategorija {
+  border: 3px dashed #aaa;
+  border-radius: 20px;
+  background-color: rgba(255,255,255,0.95);
+  width: 350px;
+  min-height: 450px;
+  max-height: 450px;
+  overflow-y: auto;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.kategorija h2 {
+  font-size: 26px;
+  margin: 8px 0;
+}
+
+.korteles, .kategorija .korteles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+  padding: 8px;
+}
+
+.kortele {
+  width: 90px;
+  height: 120px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+}
+
+.kortele img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  animation: popin 0.6s ease;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  position: relative;
+  max-width: 80%;
+}
+
+.modal-content img {
+  max-width: 200px;
+  margin-bottom: 10px;
+}
+
+.modal-content h2 {
+  color: #388E3C;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.modal-content button {
+  padding: 8px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#closeModalButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+#closeModalButton:hover {
+  background-color: #f0f0f0;
+}
+
+@keyframes popin {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 800px) {
+  .kategorija {
+    width: 300px;
+    min-height: 400px;
+    max-height: 400px;
+  }
+  .kategorija h2 {
+    font-size: 22px;
+  }
+  .kortele {
+    width: 80px;
+    height: 100px;
+  }
+  .container {
+    gap: 20px;
+    padding: 10px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  .atgal, #mute-button, #resetZaidima {
+    width: 40px;
+    height: 40px;
+  }
+  #resetZaidima {
+    right: 60px;
+  }
+}
