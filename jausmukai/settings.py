@@ -9,9 +9,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-&plj%h0$(oytxxpk43r%_)=0jv*el6(u7*8l0s97-l0$2ij28a')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'ugdymo-sistema.onrender.com',
+    *([os.environ.get('RENDER_EXTERNAL_HOSTNAME')] if os.environ.get('RENDER_EXTERNAL_HOSTNAME') else [])
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -41,7 +46,7 @@ ROOT_URLCONF = 'jausmukai.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'emocijos' / 'templates'],
+        'DIRS': [],  # Remove emocijos/templates to avoid conflicts
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -54,12 +59,10 @@ TEMPLATES = [
     },
 ]
 
-
-
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        default=os.environ.get('DATABASE_URL', 'sqlite:///' + str(BASE_DIR / 'db.sqlite3')),
         conn_max_age=600
     )
 }
