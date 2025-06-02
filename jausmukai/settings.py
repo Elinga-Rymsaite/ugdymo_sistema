@@ -62,11 +62,10 @@ TEMPLATES = [
 # Database
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=os.environ.get('DATABASE_URL', 'sqlite:///' + str(BASE_DIR / 'db.sqlite3')),
         conn_max_age=600
     )
 }
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
