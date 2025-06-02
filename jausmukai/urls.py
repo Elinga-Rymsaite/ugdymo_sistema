@@ -16,14 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import RedirectView  # Import RedirectView
 from emocijos import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.pagrindinis, name='pagrindinis'),
+    path('', RedirectView.as_view(url='/meniu', permanent=True), name='redirect-to-meniu'),
+    path('meniu/', views.pagrindinis, name='pagrindinis'),  # Added trailing slash for consistency
     path('emociju-atpazinimas/', views.emociju_atpazinimas, name='emociju_atpazinimas'),
     path('valgiu-derinimas/', views.valgiu_derinimas, name='valgiu_derinimas'),
     path('dienos-rezimas/', views.dienos_rezimas, name='dienos_rezimas'),
     path('svaros_zaidimas/', views.svaros_zaidimas, name='svaros_zaidimas'),
- path('veidukas/', views.veidukas, name='veidukas'),
+    path('veidukas/', views.veidukas, name='veidukas'),
 ]
