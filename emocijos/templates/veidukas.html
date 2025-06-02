@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sukurk savo veiduką</title>
+<link rel="stylesheet" href="{% static 'css/veiduko_kurimas.css' %}">
+</head>
+<body>
+  <button class="atgal" onclick="history.back()"></button>
+  <button id="mute-button" onclick="toggleMute()"></button>
+  <button id="reset-button" onclick="resetCanvas()" title="Atnaujinti žaidimą"></button>
+  <button class="save-button" onclick="saveEmoji()" title="Spausdinti"></button>
+  <audio id="background-music" autoplay loop>
+    <source src="{% static 'audio/nemokama.mp3' %}" type="audio/mpeg" />
+  </audio>
+  <div class="container">
+    <div class="image-section">
+      <h1>Sukurk savo veiduką</h1>
+      <canvas id="emojiCanvas" width="400" height="400"></canvas>
+    </div>
+    <div class="sidebar">
+      <div class="category">
+        <h3>Akys</h3>
+        <div class="category-buttons">
+          <img src="{% static 'image/nustebusios.png' %}?v={% now 'U' %}" class="draggable" id="eyes1" draggable="true" ondragstart="drag(event)" />
+          <img src="{% static 'image/linksmesnes.png' %}?v={% now 'U' %}" class="draggable" id="eyes2" draggable="true" ondragstart="drag(event)" />
+        </div>
+      </div>
+      <div class="category">
+        <h3>Burna</h3>
+        <div class="category-buttons">
+          <img src="{% static 'image/burnadantukai.png' %}?v={% now 'U' %}" class="draggable" id="mouth1" draggable="true" ondragstart="drag(event)" />
+          <img src="{% static 'image/sad.png' %}?v={% now 'U' %}" class="draggable" id="mouth2" draggable="true" ondragstart="drag(event)" />
+        </div>
+      </div>
+      <div class="category">
+        <h3>Nosys</h3>
+        <div class="category-buttons">
+          <img src="{% static 'image/ovali.png' %}?v={% now 'U' %}" class="draggable" id="nose1" draggable="true" ondragstart="drag(event)" />
+          <img src="{% static 'image/apvali.png' %}?v={% now 'U' %}" class="draggable" id="nose2" draggable="true" ondragstart="drag(event)" />
+        </div>
+      </div>
+      <div class="category">
+        <h3>Akinukai</h3>
+        <div class="category-buttons">
+          <img src="{% static 'image/akinukai.png' %}?v={% now 'U' %}" class="draggable" id="glasses1" draggable="true" ondragstart="drag(event)" />
+          <img src="{% static 'image/akinukair.png' %}?v={% now 'U' %}" class="draggable" id="glasses2" draggable="true" ondragstart="drag(event)" />
+          <img src="{% static 'image/akinukaim.png' %}?v={% now 'U' %}" class="draggable" id="glasses3" draggable="true" ondragstart="drag(event)" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Success Modal -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <button id="closeModalButton" aria-label="Close modal">✖</button>
+      <img src="{% static 'image/šypsenelė.png' %}?v={% now 'U' %}" alt="Šypsenelė" />
+      <h2>Puikiai padirbėta!</h2>
+      <button onclick="location.reload()">🔁 Žaisti dar kartą</button>
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById('emojiCanvas');
+    const ctx = canvas.getContext('2d');
+    const music = document.getElementById('background-music');
+    const muteButton = document.getElementById('mute-button');
+
+    function drawEmoji() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(200, 200, 190, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffff99';
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function resetCanvas() {
+      features = { eyes: null, mouth: null, nose: null, glasses: null };
+      drawEmoji();
+    }
+
+    function saveEmoji() {
+      window.print();
+      document.getElementById('successModal').style.display = 'flex';
+    }
+
+    let features = {
+      eyes: null,
+      mouth: null,
+      nose: null,
+      glasses: null
+    };
+
+    function redrawCanvas() {
+      drawEmoji();
+      for (const key in features) {
+        if (features[key]) {
+          const img = features[key].image;
+          const { x, y, size } = features[key].pos;
+          ctx.drawImage(img, x - size / 2, y - size / 2, size, size);
+        }
+      }
+    }
+
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    canvas.ondragover = function(e) {
+      e.preventDefault();
+    };
+
+    canvas.ondrop = function(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData("text");
+      const imgElement = document.getElementById(id);
+      const image = new Image();
+      image.src = imgElement.src;
+      image.onload = function () {
+        let x = 200, y = 200, size = 100;
+        if (id.includes("eyes")) {
+          y = 160;
+          size = 150;
+          features.eyes = { image, pos: { x, y, size } };
+        } else if (id.includes("mouth")) {
+          y = 265;
+          size = 100;
+          features.mouth = { image, pos: { x, y, size } };
+        } else if (id.includes("nose")) {
+          y = 215;
+          size = 40;
+          features.nose = { image, pos: { x, y, size } };
+        } else if (id.includes("glasses")) {
+          y = 150;
+          size = 180;
+          features.glasses = { image, pos: { x, y, size } };
+        }
+        redrawCanvas();
+      };
+    };
+
+    function toggleMute() {
+      const isMuted = !music.muted;
+      music.muted = isMuted;
+      if (!music.muted) {
+        music.volume = 0.1; // Ensure volume is 10% when unmuted
+      }
+      muteButton.classList.toggle('muted', isMuted);
+      localStorage.setItem('muted', isMuted);
+    }
+
+    document.getElementById('closeModalButton').addEventListener('click', () => {
+      document.getElementById('successModal').style.display = 'none';
+    });
+
+    document.getElementById('successModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        e.currentTarget.style.display = 'none';
+      }
+    });
+
+    window.onload = () => {
+      drawEmoji();
+      const savedMuted = localStorage.getItem('muted');
+      music.volume = 0.1; // Set initial volume to 10%
+      if (savedMuted === 'true') {
+        music.muted = true;
+        muteButton.classList.add('muted');
+      } else {
+        music.muted = false;
+        muteButton.classList.remove('muted');
+      }
+    };
+  </script>
+</body>
+</html>
